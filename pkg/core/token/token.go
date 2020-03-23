@@ -20,7 +20,7 @@ func NewService(secret []byte, pool *pgxpool.Pool) *Service {
 }
 
 type Payload struct {
-	Id    int `json:"id"`
+	Id    int   `json:"id"`
 	Exp   int64 `json:"exp"`
 	Phone int   `json:"phone"`
 }
@@ -37,16 +37,10 @@ type ResponseDTO struct {
 var ErrInvalidLogin = errors.New("invalid password")
 var ErrInvalidPassword = errors.New("invalid password")
 
-
-
 func (s *Service) Generate(context context.Context, request *RequestDTO) (response ResponseDTO, err error) {
 	var pass string
 	var id int
 	var phone int
-	log.Print("a")
-	log.Print(request.Username, "log")
-	log.Print(request.Password, "pass")
-	log.Print(context)
 	err = s.pool.QueryRow(context,
 		`SELECT password, id, phone 
 		FROM users
@@ -57,17 +51,14 @@ func (s *Service) Generate(context context.Context, request *RequestDTO) (respon
 		&id,
 		&phone,
 	)
-	log.Print("queryrow")
-	log.Print("b")
 	if err != nil {
+		log.Print("can't select to db generate token: %d", err)
 		err = ErrInvalidLogin
 		return
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	log.Print(string(hash))
-log.Print("c")
 	err = bcrypt.CompareHashAndPassword(hash, []byte(request.Password))
-	log.Print("d")
 	if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 		err = ErrInvalidPassword
 		return
@@ -78,6 +69,5 @@ log.Print("c")
 		Exp:   time.Now().Add(time.Hour).Unix(),
 		Phone: phone,
 	}, s.secret)
-	log.Print("e finish")
 	return
 }

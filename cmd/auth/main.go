@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/jafarsirojov/bank-auth/cmd/auth/app"
-	"github.com/jafarsirojov/bank-auth/pkg/core/token"
-	"github.com/jafarsirojov/bank-auth/pkg/core/users"
 	"context"
 	"flag"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jafarsirojov/bank-auth/cmd/auth/app"
+	"github.com/jafarsirojov/bank-auth/pkg/core/token"
+	"github.com/jafarsirojov/bank-auth/pkg/core/users"
 	"github.com/jafarsirojov/mux/pkg/mux"
 	"log"
 	"net"
 	"net/http"
 )
-
+//-host 0.0.0.0 -port 9011 -dsn postgres://user:pass@localhost:5302/app
 func main() {
 	flag.Parse()
 	envPort, ok := FromFlagOrEnv(*port, ENV_PORT)

@@ -24,7 +24,7 @@ func (s *Server) InitRoutes() {
 	)
 	s.router.POST(
 		"/api/users",
-		s.handlePostAddUser,
+		s.handlePostSave,
 		logger.Logger("POST USERS"),
 	)
 

@@ -1,10 +1,10 @@
 package app
 
 import (
-	"github.com/jafarsirojov/bank-auth/pkg/core/token"
-	"github.com/jafarsirojov/bank-auth/pkg/core/users"
 	"errors"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jafarsirojov/bank-auth/pkg/core/token"
+	"github.com/jafarsirojov/bank-auth/pkg/core/users"
 	"github.com/jafarsirojov/jwt/pkg/jwt"
 	"github.com/jafarsirojov/mux/pkg/mux"
 	jwtmidl "github.com/jafarsirojov/mux/pkg/mux/middleware/jwt"
@@ -122,7 +122,7 @@ func (s *Server) handleProfile(writer http.ResponseWriter, request *http.Request
 	return
 }
 
-func (s *Server) handlePostAddUser(writer http.ResponseWriter, request *http.Request) {
+func (s *Server) handlePostSave(writer http.ResponseWriter, request *http.Request) {
 	user := users.User{}
 	err := rest.ReadJSONBody(request, &user)
 	if err != nil {
@@ -130,12 +130,13 @@ func (s *Server) handlePostAddUser(writer http.ResponseWriter, request *http.Req
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	err = s.userSvc.AddUser(user)
-	if err != nil {
-		log.Printf("can't handle post add user: %d", err)
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+		err = s.userSvc.Save(user)
+		if err != nil {
+			log.Printf("can't handle post add user: %d", err)
+			writer.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
 }
 
 func (s *Server) handleDeleteUserById(writer http.ResponseWriter, request *http.Request) {

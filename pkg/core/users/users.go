@@ -62,32 +62,46 @@ func (service *Service) All() (models []User, err error) {
 	return models, nil
 }
 
-func (service *Service) ById(id int) (model User, err error) {
-	panic("unimplemented")
-}
-func (service *Service) AddUser(model User) (err error) {
-	_, err = service.pool.Exec(
-		context.Background(),
-		`INSERT INTO users(name, login, password, phone) 
-		VALUES ($1, $2, $3, $4);`,
-		model.Name,
-		model.Login,
-		model.Password,
-		model.Phone,
-	)
-	if err != nil {
-		log.Printf("can't exec add user: %d", err)
-		return err
+func (service *Service) Save(model User) (err error) {
+	if model.Id == 0 {
+		_, err = service.pool.Exec(
+			context.Background(),
+			`INSERT INTO users(name, login, password, phone) 
+			VALUES ($1, $2, $3, $4);`,
+			model.Name,
+			model.Login,
+			model.Password,
+			model.Phone,
+		)
+		if err != nil {
+			log.Printf("can't exec add user: %d", err)
+			return err
+		}
+		return nil
+	} else {
+		_, err = service.pool.Exec(context.Background(),
+			`UPDATE users 
+			SET (name=$2, login=$3, password=$4, phone=$5) 
+			WHERE removed = FALSE and id=$1`,
+			model.Id,
+			model.Name,
+			model.Login,
+			model.Password,
+			model.Phone,
+		)
+		if err != nil {
+			log.Print("can't exec update blocked ", err)
+			return err
+		}
+		return nil
 	}
-	return nil
-}
-
-func (service *Service) Save(model User) {
-	panic("unimplemented")
 }
 
 func (service *Service) RemoveById(id int) (err error) {
-	_, err = service.pool.Exec(context.Background(), `UPDATE users SET removed=TRUE WHERE removed = FALSE and id=$1`, id)
+	_, err = service.pool.Exec(context.Background(),
+		`UPDATE users 
+		SET removed=TRUE 
+		WHERE removed = FALSE and id=$1`, id)
 	if err != nil {
 		log.Print("can't exec update blocked ", err)
 		return err

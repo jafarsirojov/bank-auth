@@ -25,36 +25,20 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "Vasya",
-  "login": "vasya",
+
+  "name": "Parviz",
+  "login": "parviz",
   "password": "secret",
-  "phone": 911
+  "phone": 987654321
 }
 
 ###
 DELETE http://localhost:9011/api/users/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZXhwIjoxNTg0ODU4MDk4LCJwaG9uZSI6OTExfQ.lZFAKdb1fwtzqvSQ7sDk2MgHRFAfSJ06_Ju17NwYQ4w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiZXhwIjoxNTg0OTUwNTA4LCJwaG9uZSI6MH0.89ZNgqEmXtDAC24IUhmMZDEJud7J8vFUYhS6x7L587g
 
 ###
 
 GET http://localhost:9011/api/users
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwiZXhwIjoxNTg0ODY0MDA4LCJwaG9uZSI6MH0.HWitIlR7a5dOL8d2nZ0DVFqGHumPbpLQMYyorECZkpQ
-
-###
-
-GET http://localhost:9009/api/cards/ownerid/1
-
-###
-
-
-POST http://localhost:9009/api/cards/transmoney/0
-Content-Type: application/json
-Accept: application/json
-
-{
-  "IdCardSender": 0,
-  "NumberCardRecipient": "202160000000009",
-  "Count": 150
-}
 
 ###
