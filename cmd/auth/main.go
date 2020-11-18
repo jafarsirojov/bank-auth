@@ -12,7 +12,7 @@ import (
 	"net"
 	"net/http"
 )
-//-host 0.0.0.0 -port 9011 -dsn postgres://user:pass@localhost:5302/app
+//-host 0.0.0.0 -port 9011 -dsn postgres://user:pass@localhost:5505/app
 func main() {
 	flag.Parse()
 	envPort, ok := FromFlagOrEnv(*port, ENV_PORT)

@@ -26,7 +26,7 @@ Accept: application/json
 
 {
 
-  "name": "Parviz",
+  "name": "Par",
   "login": "parviz",
   "password": "secret",
   "phone": 987654321
