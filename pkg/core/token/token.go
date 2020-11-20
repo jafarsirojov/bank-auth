@@ -37,11 +37,12 @@ type ResponseDTO struct {
 var ErrInvalidLogin = errors.New("invalid password")
 var ErrInvalidPassword = errors.New("invalid password")
 
-func (s *Service) Generate(context context.Context, request *RequestDTO) (response ResponseDTO, err error) {
+func (s *Service) Generate(ctx context.Context, request *RequestDTO) (response ResponseDTO, err error) {
 	var pass string
 	var id int
 	var phone int
-	err = s.pool.QueryRow(context,
+	ctx, _ = context.WithTimeout(ctx, 55*time.Second)
+	err = s.pool.QueryRow(context.Background(),
 		`SELECT password, id, phone 
 		FROM users
 		WHERE removed = FALSE AND login = $1`,
