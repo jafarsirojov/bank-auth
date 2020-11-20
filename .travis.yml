@@ -6,4 +6,4 @@ script:
 deploy:
   provider: heroku
   api-key: $HEROKU_KEY
-  app: bank-auth
+  app: bank-auth-jafar
