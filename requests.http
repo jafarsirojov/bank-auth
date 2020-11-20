@@ -1,4 +1,4 @@
-POST http://localhost:9011/api/tokens
+POST https://bank-auth-jafar.herokuapp.com/api/tokens
 Content-Type: application/json
 Accept: application/json
 
