@@ -1,7 +1,6 @@
 package app
 
 import (
-	"errors"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/jafarsirojov/bank-auth/pkg/core/token"
 	"github.com/jafarsirojov/bank-auth/pkg/core/users"
@@ -52,13 +51,13 @@ func (s *Server) handleCreateToken(writer http.ResponseWriter, request *http.Req
 	response, err := s.tokenSvc.Generate(request.Context(), &body)
 	if err != nil {
 		switch {
-		case errors.Is(err, token.ErrInvalidLogin):
+		case err == token.ErrInvalidLogin:
 			writer.WriteHeader(http.StatusBadRequest)
 			err := rest.WriteJSONBody(writer, &ErrorDTO{
 				[]string{"err.login_mismatch"},
 			})
 			log.Print(err)
-		case errors.Is(err, token.ErrInvalidPassword):
+		case err == token.ErrInvalidPassword:
 			writer.WriteHeader(http.StatusBadRequest)
 			err := rest.WriteJSONBody(writer, &ErrorDTO{
 				[]string{"err.password_mismatch"},
@@ -130,12 +129,12 @@ func (s *Server) handlePostSave(writer http.ResponseWriter, request *http.Reques
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-		err = s.userSvc.Save(user)
-		if err != nil {
-			log.Printf("can't handle post add user: %d", err)
-			writer.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+	err = s.userSvc.Save(user)
+	if err != nil {
+		log.Printf("can't handle post add user: %d", err)
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 }
 
