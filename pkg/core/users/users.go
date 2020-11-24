@@ -63,6 +63,7 @@ func (service *Service) All() (models []User, err error) {
 }
 
 func (service *Service) Save(model User) (err error) {
+	log.Println("model:---------- ", model)
 	if model.Id == 0 {
 		_, err = service.pool.Exec(
 			context.Background(),
