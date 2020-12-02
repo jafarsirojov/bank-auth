@@ -167,6 +167,24 @@ func (s *Service) Profile(id int) (users []User, err error) {
 	return users, nil
 }
 
+func (s *Service) GetUserByID(id int) (user User, err error) {
+
+	_ = s.pool.QueryRow(context.Background(),
+		`SELECT id, name, login, password, phone 
+			FROM users 
+			WHERE id=$1`,
+		id).Scan(
+		&user.Id,
+		&user.Name,
+		&user.Login,
+		&user.Password,
+		&user.Phone,
+	)
+
+	log.Print("showing ")
+	return user, nil
+}
+
 type UserTDO struct {
 	Id       int64  `json:"id"`
 	Name     string `json:"name"`

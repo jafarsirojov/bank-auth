@@ -121,6 +121,62 @@ func (s *Server) handleProfile(writer http.ResponseWriter, request *http.Request
 	return
 }
 
+func (s *Server) handleGetUserByID(writer http.ResponseWriter, request *http.Request) {
+	authentication, ok := jwtmidl.FromContext(request.Context()).(*token.Payload)
+	if !ok {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Print("can't authentication is not ok")
+		return
+	}
+	if authentication == nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		log.Print("can't authentication is nil")
+		return
+	}
+	//if authentication.Id == 0 {
+	//	log.Print("admin show users")
+	//	users, err := s.userSvc.Profile(-1)
+	//	if err != nil {
+	//		log.Printf("can't show users: %d", err)
+	//		writer.WriteHeader(http.StatusInternalServerError)
+	//		return
+	//	}
+	//	err = rest.WriteJSONBody(writer, users)
+	//	if err != nil {
+	//		log.Print("can't write json body to profile users")
+	//	}
+	//	log.Print("user showing")
+	//	return
+	//}
+
+	value, ok := mux.FromContext(request.Context(), "id")
+	if !ok {
+		log.Print("can't delete by id")
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	id, err := strconv.Atoi(value)
+	if err != nil {
+		log.Println("Can't strconv.Atoi", err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	log.Print("admin show profile user")
+	user, err := s.userSvc.GetUserByID(id)
+	if err != nil {
+		log.Printf("can't delete user by id: %d", err)
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = rest.WriteJSONBody(writer, user)
+	if err != nil {
+		log.Print("can't write json body to profile users")
+	}
+	log.Print("user showing")
+	return
+}
+
 func (s *Server) handlePostSave(writer http.ResponseWriter, request *http.Request) {
 	user := users.User{}
 	err := rest.ReadJSONBody(request, &user)

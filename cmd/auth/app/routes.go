@@ -22,6 +22,13 @@ func (s *Server) InitRoutes() {
 		jwtMiddleware,
 		logger.Logger("USERS"),
 	)
+	s.router.GET(
+		"/api/users/{id}",
+		s.handleGetUserByID,
+		authenticated.Authenticated(jwt.IsContextNonEmpty),
+		jwtMiddleware,
+		logger.Logger("USERS"),
+	)
 	s.router.POST(
 		"/api/users",
 		s.handlePostSave,

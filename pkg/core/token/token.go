@@ -67,7 +67,7 @@ func (s *Service) Generate(ctx context.Context, request *RequestDTO) (response R
 
 	response.Token, err = jwt.Encode(Payload{
 		Id:    id,
-		Exp:   time.Now().Add(time.Hour).Unix(),
+		Exp:   time.Now().Add(time.Hour*3).Unix(),
 		Phone: phone,
 	}, s.secret)
 	return
